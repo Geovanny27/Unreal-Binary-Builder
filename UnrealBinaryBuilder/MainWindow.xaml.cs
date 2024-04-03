@@ -1267,7 +1267,7 @@ namespace UnrealBinaryBuilder
 				{
 					string sub = MyEngineName.Substring(pos).Replace(".", "");
 					string RemovedName = MyEngineName.Remove(pos);
-					double EngineValue = Convert.ToDouble(RemovedName.Insert(pos, sub));
+					double EngineValue = Convert.ToDouble(RemovedName.Insert(pos, sub), System.Globalization.CultureInfo.InvariantCulture);
 					return EngineValue;
 				}
 			}
