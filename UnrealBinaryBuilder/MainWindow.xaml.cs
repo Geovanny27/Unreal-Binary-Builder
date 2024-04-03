@@ -1805,5 +1805,27 @@ namespace UnrealBinaryBuilder
 				}
 			}
 		}
-	}
+
+        private void ZipButton_Click(object sender, RoutedEventArgs e)
+        {
+            EngineTabControl.SelectedIndex = 1;
+            if (FinalBuildPath == null)
+            {
+                if (UnrealBinaryBuilderHelpers.IsUnrealEngine5)
+                {
+                    FinalBuildPath = Path.GetFullPath(AutomationExePath).Replace(@$"\Engine\Binaries\DotNET\{UnrealBinaryBuilderHelpers.AUTOMATION_TOOL_NAME}", @"\LocalBuilds\Engine").Replace(Path.GetFileName(AutomationExePath), "");
+                }
+                else
+                {
+                    FinalBuildPath = Path.GetFullPath(AutomationExePath).Replace(@"\Engine\Binaries\DotNET", @"\LocalBuilds\Engine").Replace(Path.GetFileName(AutomationExePath), "");
+                }
+                GameAnalyticsCSharp.LogEvent("Final Build Path was null. Fixed.", GameAnalyticsSDK.Net.EGAErrorSeverity.Info);
+            }
+            AddLogEntry($"Creating ZIP file. Installed build can be found in {FinalBuildPath}");
+            postBuildSettings.PrepareToSave();
+            postBuildSettings.SaveToZip(FinalBuildPath, ZipPath.Text);
+            AddLogEntry($"Saving zip file to {ZipPath.Text}");
+            WriteToLogFile();
+        }
+    }
 }
